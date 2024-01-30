@@ -23,7 +23,6 @@ namespace SkylineTask
 
     class Program
     {
-        private const int PollingRate = 2;
         static void Main()
         {
             string jsonString = @"{
@@ -41,10 +40,11 @@ namespace SkylineTask
             try
             {
                 AristaDevice aristaDevice = JsonConvert.DeserializeObject<AristaDevice>(jsonString);
+                var bitrateCalculator = new BitrateCalculatorService();
                 for (int i = 0; i < aristaDevice.NIC.Count; i++)
                 {
                     Console.WriteLine($"Rx/Tx bitrate for {aristaDevice.NIC[i].Description}");
-                    CalculateBitrates(aristaDevice.NIC[i]);
+                    bitrateCalculator.CalculateBitrates(aristaDevice.NIC[i]);
                 }
 
             }
@@ -55,26 +55,6 @@ namespace SkylineTask
 
 
 
-        }
-
-        static void CalculateBitrates(NICData nicData)
-        {
-
-
-            try
-            {
-                long rxBits = nicData.Rx * 8;
-                long txBits = nicData.Tx * 8;
-                long rxBitrate = rxBits / PollingRate;
-                long txBitrate = txBits / PollingRate;
-
-                Console.WriteLine($"Rx Bitrate: {rxBitrate} bits/s");
-                Console.WriteLine($"Tx Bitrate: {txBitrate} bits/s");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error during bitrate calculation: {ex.Message}");
-            }
         }
     }
 }
