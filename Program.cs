@@ -23,10 +23,11 @@ namespace SkylineTask
             {
                 AristaDevice aristaDevice = JsonConvert.DeserializeObject<AristaDevice>(jsonString);
                 var bitrateCalculator = new BitrateCalculatorService();
-                for (int i = 0; i < aristaDevice.NIC.Count; i++)
+
+                foreach(NICData data in aristaDevice.NIC)
                 {
-                    Console.WriteLine($"Rx/Tx bitrate for {aristaDevice.NIC[i].Description}");
-                    bitrateCalculator.CalculateBitrates(aristaDevice.NIC[i]);
+                    Console.WriteLine($"Rx/Tx bitrate for {data.Description}");
+                    bitrateCalculator.CalculateBitrates(data);
                 }
             }
             catch (Exception e)
